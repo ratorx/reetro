@@ -9,6 +9,6 @@ This game is the journey of ( as they fight to find their long lost pair and onc
 ## Features
 
 * Beautiful Graphics --- Made by professionals!
-* Strong storyline --- Carefully crafted for maximum feels :/
-* Relatable characters --- Protagonists you can really root for!
-* Strong moral --- Never look at brackets the same way every again.
+* Strong Storyline --- Carefully crafted for maximum feels :/
+* Relatable Characters --- Protagonists you can really root for!
+* Strong Morals --- Never look at brackets the same way ever again.
