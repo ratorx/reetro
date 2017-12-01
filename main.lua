@@ -2,6 +2,7 @@ local bullet_handler = require "bullet"
 require "collision"
 local mathFunc = require "mathFunc"
 local physics = require "physics"
+local dust_handler = require "dust"
 
 function love.load()
   love.graphics.setFont(love.graphics.newFont("assets/fonts/DejaVuSansMono.ttf", 36))
@@ -16,7 +17,7 @@ function love.load()
   player.char = "("
   player.text = love.graphics.newText(love.graphics.getFont(), player.char)
   player.x = 0
-  player.y = 0
+  player.y = love.graphics.getHeight()-100
   player.w = love.graphics.getFont():getWidth(player.char)
   player.h = love.graphics.getFont():getHeight(player.char)
 
@@ -53,6 +54,7 @@ function love.update(dt)
   end
   
   bullet_handler.update(dt)
+  dust_handler.update(dt)
 end
 
 function love.keypressed(key)
@@ -77,6 +79,9 @@ function love.keyreleased(key)
 end
 
 function love.draw()
+  dust_handler.draw()
+  
+  love.graphics.setColor(255, 255, 255)
   love.graphics.draw(player.text, player.x, player.y)
   local width = love.graphics.getWidth()
   for i = 0, love.graphics.getWidth(), love.graphics.getFont():getWidth(level.char) do

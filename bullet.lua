@@ -9,6 +9,13 @@ local isShooting = false
 local function update(dt)
   for i = #bullets, 1, -1 do
     local bullet = bullets[i]
+    if bullet.x > love.graphics.getWidth() then
+      table.remove(bullets, i)
+    end
+  end
+  
+  for i = #bullets, 1, -1 do
+    local bullet = bullets[i]
     bullet.x = bullet.x + VELOCITY
   end
 end
