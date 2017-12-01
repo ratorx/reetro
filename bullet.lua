@@ -1,6 +1,7 @@
 local M = {}
 
 local VELOCITY = 5
+local CHAR = "-"
 
 local bullets = {}
 local isShooting = false
@@ -37,7 +38,7 @@ local function draw()
   love.graphics.setColor(255, 255, 255)
   for i = #bullets, 1, -1 do
     local bullet = bullets[i]
-    love.graphics.rectangle("fill", bullet.x, bullet.y, 10, 10)
+    love.graphics.print(CHAR, bullet.x, bullet.y)
   end
 end
 M.draw = draw
