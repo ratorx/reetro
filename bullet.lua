@@ -1,7 +1,7 @@
 local M = {}
 
-local VELOCITY = 5
-local CHAR = "♆"
+local VELOCITY = 10
+local CHAR = "-"
 
 local bullets = {}
 local isShooting = false
@@ -18,8 +18,8 @@ local function keypressed(key)
   if key == "space" then
     if not isShooting then
       local bullet = {}
-      bullet.x = 0
-      bullet.y = 0
+      bullet.x = player.x
+      bullet.y = player.y
       table.insert(bullets, bullet)
     end
     isShooting = true

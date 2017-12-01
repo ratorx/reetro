@@ -14,8 +14,8 @@ function love.load()
   player.text = love.graphics.newText(love.graphics.getFont(), player.char)
   player.x = 0
   player.y = 0
-  player.w = love.graphics.getFont():getWidth(level.char)
-  player.h = love.graphics.getFont():getHeight(level.char)
+  player.w = love.graphics.getFont():getWidth(player.char)
+  player.h = love.graphics.getFont():getHeight(player.char)
 end
 
 function love.update(dt)
