@@ -4,7 +4,7 @@ Long ago, the 256 ascii characters lived in harmony. Then everything changed whe
 
 Only the (), delimiter of everything, could stop them. But when the asciis needed them most, ) vanished.
 
-This game is the journey of ( as he fights to find his long lost pair and once again be well-bracketed for all eternity.
+This game is the journey of ( as they fight to find their long lost pair and once again be well-bracketed for all eternity.
 
 ## Features
 
