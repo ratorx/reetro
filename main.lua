@@ -4,14 +4,17 @@ local mathFunc = require "mathFunc"
 local physics = require "physics"
 local dust_handler = require "dust"
 require "mathlib"
+local power_handler = require "powertype"
 
 function love.load()
+  WIDTH, HEIGHT = love.graphics.getWidth(), love.graphics.getHeight()
+  
   love.graphics.setFont(love.graphics.newFont("assets/fonts/DejaVuSansMono.ttf", 36))
   
   level = {}
   level.char = "z"
   level.text = love.graphics.newText(love.graphics.getFont(), level.char)
-  level.base = love.graphics.getHeight() - love.graphics.getFont():getHeight(level.char) * 1.5
+  level.base = HEIGHT - love.graphics.getFont():getHeight(level.char) * 1.5
   level.grav = love.graphics.getFont():getHeight(level.char) * 30 --one sec to fall
 
   player = {}
@@ -31,16 +34,6 @@ end
 function love.update(dt)
   local x = player.x
   local y = player.y
-  
-  -- if love.keyboard.isDown("right") then
-  --   player.x = player.x + 5
-  -- elseif love.keyboard.isDown("down") then
-  --   player.y = player.y + 5
-  -- elseif love.keyboard.isDown("left") then
-  --   player.x = player.x - 5
-  -- elseif love.keyboard.isDown("up") then
-  --   player.y = player.y - 5
-  -- end
 
   -- Player
   player.x = physics.updatePos(dt, player.vx, player.x)
@@ -48,28 +41,13 @@ function love.update(dt)
 
   player.vy = physics.updateVel(dt, level.grav, player.vy)
   
-  -- --Collision Detection
-  -- if AABB(player.x, player.y, player.w, player.h, 0, level.base, love.graphics.getWidth(), 0) then
-  --   -- player.x = x
-  --   player.y = y
-  -- end
-
-  if math.doLinesIntersect({x=x, y=y}, {x=player.x, y=player.y}, {x=0, y=level.base}, {x=love.graphics.getWidth(), y=level.base}) then
+  --Collision Detection
+  if AABB(player.x, player.y, player.w, player.h, 0, level.base, WIDTH, 0) then
+    -- player.x = x
     player.y = y
   end
 
-  if math.doLinesIntersect(point(x,y), point(player.x, player.y), point(0, 0), point(love.graphics.getWidth(), 0)) then--upper side
-    player.y = y
-  end
-
-  if math.doLinesIntersect(point(x,y), point(player.x, player.y), point(0, 0), point(0, love.graphics.getHeight())) then --left hand side
-    player.x = x
-  end
-
-  if math.doLinesIntersect(point(x,y), point(player.x, player.y), point(love.graphics.getWidth(), 0), point(love.graphics.getWidth(), love.graphics.getHeight())) then --left hand side
-    player.x = x
-  end
-  
+  power_handler.update(dt)
   bullet_handler.update(dt)
   dust_handler.update(dt)
 end
@@ -122,7 +100,8 @@ function love.keypressed(key)
   if key == "up" then
     player.vy = -player.h * 10
   end
-
+  
+  power_handler.keypressed(key)
   bullet_handler.keypressed(key)
 end
 
@@ -138,10 +117,10 @@ function love.draw()
   
   love.graphics.setColor(255, 255, 255)
   love.graphics.draw(player.text, player.x, player.y)
-  local width = love.graphics.getWidth()
-  for i = 0, love.graphics.getWidth(), love.graphics.getFont():getWidth(level.char) do
+  for i = 0, WIDTH, love.graphics.getFont():getWidth(level.char) do
     love.graphics.draw(level.text, i, level.base)
   end
   
+  power_handler.draw()
   bullet_handler.draw()
 end
