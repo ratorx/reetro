@@ -1,16 +1,20 @@
 require "collision"
 
 function love.load()
+  love.graphics.setFont(love.graphics.newFont("assets/fonts/UbuntuMono-R.ttf", 36))
+  
+  level = {}
+  level.char = "z"
+  level.text = love.graphics.newText(love.graphics.getFont(), level.char)
+  level.base = love.graphics.getHeight() - love.graphics.getFont():getHeight(level.char) * 1.5
+  
   player = {}
-  player.image = love.graphics.newImage("assets/images/main_character.png")
+  player.char = "("
+  player.text = love.graphics.newText(love.graphics.getFont(), player.char)
   player.x = 0
   player.y = 0
-  player.w = 10
-  player.h = 200
-  
-  LevelChar = "z"
-  love.graphics.setFont(love.graphics.newFont("assets/fonts/UbuntuMono-R.ttf", 36))
-  LevelCharText = love.graphics.newText(love.graphics.getFont(), LevelChar)
+  player.w = love.graphics.getFont():getWidth(level.char)
+  player.h = love.graphics.getFont():getHeight(level.char)
 end
 
 function love.update(dt)
@@ -29,17 +33,16 @@ function love.update(dt)
   end
   
   --Collision Detection
-  if AABB(player.x, player.y, player.w, player.h, 0, love.graphics.getHeight(), love.graphics.getWidth(), 0) then
+  if AABB(player.x, player.y, player.w, player.h, 0, level.base, love.graphics.getWidth(), 0) then
     player.x = x
     player.y = y
   end
 end
 
 function love.draw()
-  love.graphics.draw(player.image, player.x, player.y)
+  love.graphics.draw(player.text, player.x, player.y)
   local width = love.graphics.getWidth()
-  local height = love.graphics.getHeight() - love.graphics.getFont():getHeight(LevelChar) * 1.5
-  for i = 0, width, love.graphics.getFont():getWidth(LevelChar) do
-    love.graphics.draw(LevelCharText, i, height)
+  for i = 0, love.graphics.getWidth(), love.graphics.getFont():getWidth(level.char) do
+    love.graphics.draw(level.text, i, level.base)
   end
 end
