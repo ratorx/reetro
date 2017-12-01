@@ -8,7 +8,9 @@ function love.load()
   player.w = 10
   player.h = 200
   
-  font = love.graphics.newFont("assets/fonts/UbuntuMono-R.ttf", 36)
+  LevelChar = "z"
+  love.graphics.setFont(love.graphics.newFont("assets/fonts/UbuntuMono-R.ttf", 36))
+  LevelCharText = love.graphics.newText(love.graphics.getFont(), LevelChar)
 end
 
 function love.update(dt)
@@ -35,4 +37,9 @@ end
 
 function love.draw()
   love.graphics.draw(player.image, player.x, player.y)
+  local width = love.graphics.getWidth()
+  local height = love.graphics.getHeight() - love.graphics.getFont():getHeight(LevelChar) * 1.5
+  for i = 0, width, love.graphics.getFont():getWidth(LevelChar) do
+    love.graphics.draw(LevelCharText, i, height)
+  end
 end
