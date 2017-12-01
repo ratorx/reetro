@@ -5,7 +5,7 @@ local function testFunction()
 end
 M.testFunction = testFunction
 
-local function updatePos(dt, a, v, s)
+local function updatePos(dt, v, s)
 	return s + v * dt
 end
 M.updatePos = updatePos
