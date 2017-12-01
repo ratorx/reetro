@@ -3,6 +3,7 @@ require "collision"
 local mathFunc = require "mathFunc"
 local physics = require "physics"
 local dust_handler = require "dust"
+require "mathlib"
 
 function love.load()
   love.graphics.setFont(love.graphics.newFont("assets/fonts/DejaVuSansMono.ttf", 36))
@@ -16,8 +17,8 @@ function love.load()
   player = {}
   player.char = "("
   player.text = love.graphics.newText(love.graphics.getFont(), player.char)
-  player.x = 0
-  player.y = love.graphics.getHeight()-100
+  player.x = 1
+  player.y = 1
   player.w = love.graphics.getFont():getWidth(player.char)
   player.h = love.graphics.getFont():getHeight(player.char)
 
@@ -47,14 +48,68 @@ function love.update(dt)
 
   player.vy = physics.updateVel(dt, level.grav, player.vy)
   
-  --Collision Detection
-  if AABB(player.x, player.y, player.w, player.h, 0, level.base, love.graphics.getWidth(), 0) then
-    -- player.x = x
+  -- --Collision Detection
+  -- if AABB(player.x, player.y, player.w, player.h, 0, level.base, love.graphics.getWidth(), 0) then
+  --   -- player.x = x
+  --   player.y = y
+  -- end
+
+  if math.doLinesIntersect({x=x, y=y}, {x=player.x, y=player.y}, {x=0, y=level.base}, {x=love.graphics.getWidth(), y=level.base}) then
     player.y = y
+  end
+
+  if math.doLinesIntersect(point(x,y), point(player.x, player.y), point(0, 0), point(love.graphics.getWidth(), 0)) then--upper side
+    player.y = y
+  end
+
+  if math.doLinesIntersect(point(x,y), point(player.x, player.y), point(0, 0), point(0, love.graphics.getHeight())) then --left hand side
+    player.x = x
+  end
+
+  if math.doLinesIntersect(point(x,y), point(player.x, player.y), point(love.graphics.getWidth(), 0), point(love.graphics.getWidth(), love.graphics.getHeight())) then --left hand side
+    player.x = x
   end
   
   bullet_handler.update(dt)
   dust_handler.update(dt)
+end
+
+function checkCollisionWithLevel(level, init, curr)
+  interHori = false
+  interVert = false 
+  matrix = level.matrix
+  for j=1,level.height do
+    for i=1,level.width do
+      if not (matrix[i][j] == " " or matrix[i][j] == nil) then
+        x = (i-1) * level.charWidth
+        y = (j-1) * level.charHeight
+        w = level.charWidth
+        h = level.charHeight
+
+        intersections = math.polygonLineIntersection(
+            {x,y, x+w,y, x+w,y+h, x,y+h, x,y},
+            init, curr, false)
+
+        for idx=1, #intersections, 1 do
+          if intersections[idx].lineIndex == 1 then
+            interHori = true
+          elseif intersections[idx] == 2 then 
+            interVert = true
+          elseif intersections[idx] == 3 then
+            interHori = true
+          elseif intersections[idx] == 4 then
+            interVert = true
+          end
+        end
+      end
+    end
+  end
+  return {x= if interVert then init.x else curr.x, y= if interHori then init.y, else curr.y}
+
+end
+
+function point(x, y)
+  return {x=x, y=y}
 end
 
 function love.keypressed(key)
