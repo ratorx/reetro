@@ -1,7 +1,8 @@
 require "collision"
+local bullet_handler = require "bullet"
 
 function love.load()
-  love.graphics.setFont(love.graphics.newFont("assets/fonts/UbuntuMono-R.ttf", 36))
+  love.graphics.setFont(love.graphics.newFont("assets/fonts/DejaVuSansMono.ttf", 36))
   
   level = {}
   level.char = "z"
@@ -37,6 +38,16 @@ function love.update(dt)
     player.x = x
     player.y = y
   end
+  
+  bullet_handler.update(dt)
+end
+
+function love.keypressed(key)
+  bullet_handler.keypressed(key)
+end
+
+function love.keyreleased(key)
+  bullet_handler.keyreleased(key)
 end
 
 function love.draw()
@@ -45,4 +56,6 @@ function love.draw()
   for i = 0, love.graphics.getWidth(), love.graphics.getFont():getWidth(level.char) do
     love.graphics.draw(level.text, i, level.base)
   end
+  
+  bullet_handler.draw()
 end

@@ -1,7 +1,7 @@
 local M = {}
 
 local VELOCITY = 5
-local CHAR = "-"
+local CHAR = "♆"
 
 local bullets = {}
 local isShooting = false
